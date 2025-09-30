@@ -24,9 +24,18 @@ jobs:
 
       - name: Build web
         run: flutter build web --release
+        
+      - name: Test GH_PAT secret
+        run: |
+          if [ -z "${{ secrets.GH_PAT }}" ]; then
+           echo "GH_PAT is not set!"
+           exit 1
+          else
+           echo "GH_PAT secret exists and is accessible."
+           fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
           publish_dir: build/web
